@@ -30,15 +30,13 @@
     </head>
     <body>
         <div id="container"></div>
-        <script src="jquery-3.3.1.min.js" async></script>
-        <script src="jquery.fancybox.min.js" async></script>
         <script>
             function createGrid(images, container) {
                 // reset container;
                 container.innerHTML = "";
 
-                // our random function is deterministic to create the same grid every time
-                let seed = JSON.stringify(images[0]).length + 3;
+                // our pseudo-random function is deterministic to create the same grid every time
+                let seed = 6;
                 let rd = (max) => { seed++; return Math.pow(seed, 7)%max; }
 
                 // calculate a good number of columns
@@ -152,6 +150,8 @@
                 createGrid(imageList, document.getElementById("container"));
             });
         </script>
+        <script src="jquery-3.3.1.min.js"></script>
+        <script src="jquery.fancybox.min.js"></script>
     </body>
 </html>
 
