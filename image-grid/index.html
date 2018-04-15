@@ -1,8 +1,10 @@
 <html>
     <head>
         <meta charset="utf8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link href="jquery.fancybox.min.css" rel="stylesheet">
         <style>
+            body { margin: 0 } /* not required */
             .item {
                 display: inline-block;
                 position: relative;
@@ -40,7 +42,7 @@
                 let rd = (max) => { seed++; return Math.pow(seed, 7)%max; }
 
                 // calculate a good number of columns
-                let c = Math.floor(container.scrollWidth / 175) + 1;
+                let c = Math.floor(container.scrollWidth / 150) + 1;
                 let gutter = 20; // size of gutter in px
                 let scrollBarWidth = 17; // in most browsers, the scrollbar is 17px
                 container.style.paddingLeft = gutter + "px";
@@ -145,9 +147,14 @@
                     createGrid(imgs, document.getElementById("container"));
                 });
             });
-            // recreate grid on window resize
+
+            // recreate grid on window width resize
+            previousWidth = window.innerWidth;
             window.addEventListener("resize", () => {
-                createGrid(imageList, document.getElementById("container"));
+                if (window.innerWidth !== previousWidth) {
+                    previousWidth = window.innerWidth;
+                    createGrid(imageList, document.getElementById("container"));
+                }
             });
         </script>
         <script src="jquery-3.3.1.min.js"></script>
