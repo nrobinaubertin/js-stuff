@@ -213,7 +213,8 @@ window.nlg = {
         window.removeEventListener("keypress", nlg.keyPressLeft);
         document.body.style.cssText = nlg.bodyStyle;
         document.getElementById("nlg-modal").outerHTML = "";
-        if (!keepBackground) {
+        console.log(keepBackground);
+        if (keepBackground != true) {
             document.getElementById("nlg-modal-bg").outerHTML = "";
             window.removeEventListener("keypress", nlg.keyPressClose);
         }
