@@ -7,7 +7,7 @@ window.nlg = {
             position: fixed;
             width: 100%; height: 100%;
             top: 0; left: 0; right: 0; bottom: 0;
-            z-index: 9998;
+            z-index: 9997;
             background: rgba(0, 0, 0, 0.7);
             display: flex; justify-content: center; align-items: center;
         }
@@ -27,6 +27,7 @@ window.nlg = {
         }
         .nlg-close {
             position: fixed;
+            z-index: 9999;
             right: 0; top: 0;
             border-radius: 0 0 0 3px;
             transform: translateY(50%);
@@ -44,7 +45,7 @@ window.nlg = {
             left: 0;
             position: absolute;
             overflow: visible;
-            z-index: 9999;
+            z-index: 9998;
             width: 100%;
             box-sizing: border-box;
             opacity: 0;
@@ -135,7 +136,7 @@ window.nlg = {
             close.addEventListener("click", nlg.hide);
             nlg.keyPressClose = e => e.keyCode == 27 && nlg.hide();
             window.addEventListener("keypress", nlg.keyPressClose);
-            modalBackground.appendChild(close);
+            document.body.appendChild(close);
             document.body.appendChild(modalBackground);
         }
         let spinner = document.createElement("div");
@@ -213,8 +214,8 @@ window.nlg = {
         window.removeEventListener("keypress", nlg.keyPressLeft);
         document.body.style.cssText = nlg.bodyStyle;
         document.getElementById("nlg-modal").outerHTML = "";
-        console.log(keepBackground);
         if (keepBackground != true) {
+            document.querySelector(".nlg-close").outerHTML = "";
             document.getElementById("nlg-modal-bg").outerHTML = "";
             window.removeEventListener("keypress", nlg.keyPressClose);
         }
