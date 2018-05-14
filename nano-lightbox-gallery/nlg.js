@@ -40,6 +40,8 @@ window.nlg = {
             z-index: 9999;
             width: 100%;
             box-sizing: border-box;
+            opacity: 0;
+            transition: 300ms;
         }
         #nlg-modal > img {
             position: relative;
@@ -183,6 +185,7 @@ window.nlg = {
             modal.style.cssText = `
                 top: ${document.body.scrollTop + Math.floor(window.innerHeight/2 - img.scrollHeight/2)};
                 padding: 0 ${document.body.scrollLeft + Math.floor(window.innerWidth/2 - img.scrollWidth/2)};
+                opacity: 1;
             `;
             setTimeout(nlg.center, 1);
         });
