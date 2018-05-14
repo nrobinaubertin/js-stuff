@@ -11,7 +11,7 @@ window.nlg = {
             background: rgba(0, 0, 0, 0.7);
             display: flex; justify-content: center; align-items: center;
         }
-        .nlg-next, .nlg-prev {
+        .nlg-next, .nlg-prev, .nlg-close {
             cursor: pointer;
             position: absolute;
             top: 50%;
@@ -22,8 +22,15 @@ window.nlg = {
             background: rgba(0, 0, 0, 0.2);
             transition: .5s;
         }
-        .nlg-next:hover, .nlg-prev:hover {
+        .nlg-next:hover, .nlg-prev:hover, .nlg-close {
             background: rgba(0, 0, 0, 0.5);
+        }
+        .nlg-close {
+            position: fixed;
+            right: 0; top: 0;
+            border-radius: 0 0 0 3px;
+            transform: translateY(50%);
+            font-weight: bold;
         }
         .nlg-next {
             right: 0;
@@ -122,6 +129,13 @@ window.nlg = {
                 if (e.currentTarget != e.target) { return; }
                 nlg.hide();
             });
+            let close = document.createElement("a");
+            close.classList.add("nlg-close");
+            close.innerHTML = "&times;";
+            close.addEventListener("click", nlg.hide);
+            nlg.keyPressClose = e => e.keyCode == 27 && nlg.hide();
+            window.addEventListener("keypress", nlg.keyPressClose);
+            modalBackground.appendChild(close);
             document.body.appendChild(modalBackground);
         }
         let spinner = document.createElement("div");
@@ -201,6 +215,7 @@ window.nlg = {
         document.getElementById("nlg-modal").outerHTML = "";
         if (!keepBackground) {
             document.getElementById("nlg-modal-bg").outerHTML = "";
+            window.removeEventListener("keypress", nlg.keyPressClose);
         }
     },
     moveLeft: () => document.querySelector("#nlg-modal > img").classList.add("nlg-left"),
