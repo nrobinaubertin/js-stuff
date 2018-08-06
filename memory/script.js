@@ -125,7 +125,7 @@ function hideAllCards() {
 }
 
 function removeCard(t) {
-	t.insertAdjacentHTML('beforebegin','<div class="void unselectable"></div>');
+	t.insertAdjacentHTML('beforebegin','<div class="void"></div>');
 	t.parentNode.removeChild(t);
 }
 
@@ -183,3 +183,6 @@ window.onload = function() {
 		});
 	}
 };
+
+// disallow image dragging
+Array.from(document.getElementsByTagName('img')).forEach(e => e.ondragstart = function() { return false; });
