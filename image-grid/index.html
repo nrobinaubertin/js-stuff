@@ -117,7 +117,7 @@
                     link.dataset.fancybox = "gallery";
                     link.href = images[i].image;
                     let img = document.createElement("IMG");
-                    img.dataset.src = images[i].thumbnail; //lazyload
+                    img.dataset.src = images[i].thumbnail || images[i].image; //lazyload
                     img.classList.add("thumbnail");
                     imageContainers[id].classList.add("image-container");
                     link.appendChild(img);
