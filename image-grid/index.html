@@ -1,0 +1,164 @@
+<html>
+    <head>
+        <meta charset="utf8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link href="jquery.fancybox.min.css" rel="stylesheet">
+        <style>
+            body { margin: 0 } /* not required */
+            .item {
+                display: inline-block;
+                position: relative;
+                background: lightgrey;
+            }
+            .big {
+                display: block;
+                position: absolute;
+                z-index: 1;
+                background: darkgrey;
+            }
+            .image-container {
+                overflow: hidden;
+            }
+            .thumbnail {
+                transform: translate(-50%, -50%);
+                position: relative;
+                top: 50%;
+                left: 50%;
+                min-width: 100%;
+                min-height: 100%;
+                max-width: 200%;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="container"></div>
+        <script>
+            function createGrid(images, container) {
+                // reset container;
+                container.innerHTML = "";
+
+                // our pseudo-random function is deterministic to create the same grid every time
+                let seed = 6;
+                let rd = (max) => { seed++; return Math.pow(seed, 7)%max; }
+
+                // calculate a good number of columns
+                let c = Math.floor(container.scrollWidth / 150) + 1;
+                let gutter = 20; // size of gutter in px
+                let scrollBarWidth = 17; // in most browsers, the scrollbar is 17px
+                container.style.paddingLeft = gutter + "px";
+                container.style.paddingTop = gutter + "px";
+                container.boxSizing = "border-box";
+                let w = Math.floor((container.scrollWidth - scrollBarWidth - (1+c)*gutter)/c);
+                let items = {};
+                let numberOfImages = images.length;
+                let imageContainers = {};
+
+                // calculate numberOfBigC to make a beautiful grid
+                let n = numberOfImages;
+                let numberOfBigC = Math.max(0, Math.floor(Math.log10(2*c)*n/6) - 1);
+                n += 3*numberOfBigC;
+
+                for(i = 0; i < n; i++) {
+                    let item = document.createElement("DIV");
+                    item.classList.add("item");
+                    item.style.width = w + "px";
+                    item.style.height = w + "px";
+                    item.style.marginRight = gutter + "px";
+                    item.style.marginBottom = gutter + "px";
+                    item.dataset.i = i;
+                    // create an item list for the bigCs coming later
+                    // but don't add end of line items and two last row items
+                    if (i % c !== c-1 && i < n - (c - n%c) - c) {
+                        items[i] = item;
+                    }
+                    // create an item list for the imageContainers
+                    imageContainers[i] = item;
+                    container.appendChild(item);
+                }
+
+                for(j = 0; j < numberOfBigC; j++) {
+
+                    // "randomly" choose an item to use as starting point
+                    let rand = rd(Object.keys(items).length);
+                    let id = Object.keys(items)[rand];
+                    id = parseInt(id); // assure that id is treated as a number;
+                    let parent = items[id];
+
+                    // add the bigC to the item
+                    let bigC = document.createElement("DIV");
+                    bigC.classList.add("big");
+                    bigC.style.width = (w*2 + gutter) + "px";
+                    bigC.style.height = (w*2 + gutter) + "px";
+                    parent.appendChild(bigC);
+
+                    // remove items not suitable for a bigC or for containing an image anymore
+                    delete items[id];
+                    delete items[id - 1];
+                    delete items[id + 1];
+                    delete items[id - c - 1];
+                    delete items[id - c + 1];
+                    delete items[id - c];
+                    delete items[id + c];
+                    delete items[id + c - 1];
+                    delete items[id + c + 1];
+                    delete imageContainers[id];
+                    delete imageContainers[id + 1];
+                    delete imageContainers[id + c];
+                    delete imageContainers[id + c + 1];
+
+                    // add the bigC to the imageContainers
+                    imageContainers[id] = bigC;
+                }
+
+                // set images inside imageContainers
+                i = 0;
+                Object.keys(imageContainers).forEach(id => {
+                    let link = document.createElement("A");
+                    link.dataset.fancybox = "gallery";
+                    link.href = images[i].image;
+                    let img = document.createElement("IMG");
+                    img.dataset.src = images[i].thumbnail; //lazyload
+                    img.classList.add("thumbnail");
+                    imageContainers[id].classList.add("image-container");
+                    link.appendChild(img);
+                    imageContainers[id].appendChild(link);
+                    i++;
+                });
+                window.addEventListener("scroll", () => {
+                    let imgs = document.getElementsByClassName("thumbnail");
+                    for(let i = 0; i < imgs.length; i++) {
+                        if (
+                            imgs[i].getClientRects()[0].top < (window.innerHeight + 500)
+                            && !imgs[i].src
+                        ) {
+                            imgs[i].src = imgs[i].dataset.src;
+                        }
+                    }
+                });
+                // start loading images
+                window.dispatchEvent(new Event("scroll"));
+            }
+
+            let imageList = [];
+            // fetch the list of images and thumbnails
+            fetch("list.json").then(response => {
+                response.json().then(imgs => {
+                    imageList = imgs;
+                    createGrid(imgs, document.getElementById("container"));
+                });
+            });
+
+            // recreate grid on window width resize
+            previousWidth = window.innerWidth;
+            window.addEventListener("resize", () => {
+                if (window.innerWidth !== previousWidth) {
+                    previousWidth = window.innerWidth;
+                    createGrid(imageList, document.getElementById("container"));
+                }
+            });
+        </script>
+        <script src="jquery-3.3.1.min.js"></script>
+        <script src="jquery.fancybox.min.js"></script>
+    </body>
+</html>
+
