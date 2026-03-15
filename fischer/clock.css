@@ -1,0 +1,319 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+    font-family: sans-serif;
+    background: #111;
+    color: #fff;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Player areas */
+.player-area {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.2s;
+}
+
+.player-area.top {
+    transform: rotate(180deg);
+}
+
+/* Color states */
+.player-area.state-idle {
+    background: #888;
+}
+
+.player-area.state-active {
+    background: #4caf50;
+}
+
+.player-area.state-active-low {
+    background: #ff9800;
+}
+
+.player-area.state-dead {
+    background: #f44336;
+}
+
+/* Time display */
+.time-display {
+    font-size: 80px;
+    font-weight: bold;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+/* Move counter */
+.move-counter {
+    position: absolute;
+    bottom: 12px;
+    left: 16px;
+    font-size: 18px;
+    opacity: 0.75;
+}
+
+/* Gear button */
+.gear-btn {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 28px;
+    cursor: pointer;
+    opacity: 0.7;
+    line-height: 1;
+    padding: 4px;
+}
+
+.gear-btn:hover {
+    opacity: 1;
+}
+
+/* Settings panel */
+.settings-panel {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.88);
+    border-radius: 10px;
+    padding: 20px 24px;
+    min-width: 220px;
+    z-index: 10;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.settings-panel.open {
+    display: flex;
+}
+
+/* Settings panel inside rotated top area must counter-rotate */
+.player-area.top .settings-panel {
+    transform: translate(-50%, -50%) rotate(180deg);
+}
+
+.settings-panel h3 {
+    margin-bottom: 4px;
+    font-size: 16px;
+}
+
+.settings-panel label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 14px;
+}
+
+.settings-panel input[type="number"] {
+    width: 100%;
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid #555;
+    background: #222;
+    color: #fff;
+    font-size: 16px;
+}
+
+.apply-btn {
+    margin-top: 4px;
+    padding: 8px;
+    border: none;
+    border-radius: 6px;
+    background: #4caf50;
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.apply-btn:hover {
+    background: #43a047;
+}
+
+/* Controls strip */
+#controls {
+    height: 64px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: #222;
+    z-index: 5;
+}
+
+#controls button {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    background: #444;
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+#controls button:hover {
+    background: #555;
+}
+
+#btn-pause {
+    font-size: 18px;
+    min-width: 44px;
+}
+
+#btn-presets svg {
+    width: 20px;
+    height: 20px;
+    display: block;
+}
+
+/* Preset modal */
+#preset-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 20;
+}
+
+#preset-backdrop.open {
+    display: block;
+}
+
+#preset-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #2a2a2a;
+    border-radius: 12px;
+    padding: 24px;
+    z-index: 21;
+    min-width: 240px;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#preset-modal.open {
+    display: flex;
+}
+
+#preset-modal h3 {
+    font-size: 16px;
+    text-align: center;
+    opacity: 0.8;
+    margin-bottom: 4px;
+}
+
+#preset-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#preset-list .preset-btn {
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #444;
+    color: #fff;
+    font-size: 17px;
+    cursor: pointer;
+    text-align: center;
+}
+
+#preset-list .preset-btn:hover {
+    background: #555;
+}
+
+/* Confirm modal */
+#confirm-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 30;
+}
+
+#confirm-backdrop.open {
+    display: block;
+}
+
+#confirm-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #2a2a2a;
+    border-radius: 12px;
+    padding: 24px;
+    z-index: 31;
+    min-width: 260px;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#confirm-modal.open {
+    display: flex;
+}
+
+#confirm-message {
+    font-size: 16px;
+    text-align: center;
+    line-height: 1.4;
+}
+
+#confirm-actions {
+    display: flex;
+    gap: 10px;
+}
+
+#confirm-actions button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#confirm-cancel {
+    background: #444;
+    color: #fff;
+}
+
+#confirm-cancel:hover {
+    background: #555;
+}
+
+#confirm-ok {
+    background: #f44336;
+    color: #fff;
+}
+
+#confirm-ok:hover {
+    background: #e53935;
+}

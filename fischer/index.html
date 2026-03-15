@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fischer Clock</title>
+    <link rel="stylesheet" href="clock.css">
+</head>
+<body>
+    <div class="player-area top state-idle" id="player-top">
+        <div class="time-display" id="time-top">10:00</div>
+        <div class="move-counter" id="moves-top">0 moves</div>
+        <button class="gear-btn" id="gear-top" title="Settings">&#9881;</button>
+        <div class="settings-panel" id="settings-top">
+            <h3>Player 2 Settings</h3>
+            <label>Time (min) <input type="number" id="base-top" min="0" max="180" value="10"></label>
+            <label>Increment (sec) <input type="number" id="inc-top" min="0" max="300" value="10"></label>
+            <button class="apply-btn" data-side="top">Apply</button>
+        </div>
+    </div>
+
+    <div id="controls">
+        <button id="btn-pause" title="Pause/Play">&#9646;&#9646;</button>
+        <button id="btn-reset" title="Reset">&#8635;</button>
+        <button id="btn-presets" title="Presets">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+            </svg>
+        </button>
+    </div>
+
+    <div id="preset-backdrop"></div>
+    <div id="preset-modal">
+        <h3>Choose a time control</h3>
+        <div id="preset-list">
+            <button class="preset-btn" data-base="60000" data-inc="2000">1 min + 2 sec</button>
+            <button class="preset-btn" data-base="180000" data-inc="3000">3 min + 3 sec</button>
+            <button class="preset-btn" data-base="300000" data-inc="4000">5 min + 4 sec</button>
+            <button class="preset-btn" data-base="600000" data-inc="10000">10 min + 10 sec</button>
+            <button class="preset-btn" data-base="1200000" data-inc="20000">20 min + 20 sec</button>
+        </div>
+    </div>
+
+    <div class="player-area bottom state-idle" id="player-bottom">
+        <div class="time-display" id="time-bottom">10:00</div>
+        <div class="move-counter" id="moves-bottom">0 moves</div>
+        <button class="gear-btn" id="gear-bottom" title="Settings">&#9881;</button>
+        <div class="settings-panel" id="settings-bottom">
+            <h3>Player 1 Settings</h3>
+            <label>Time (min) <input type="number" id="base-bottom" min="0" max="180" value="10"></label>
+            <label>Increment (sec) <input type="number" id="inc-bottom" min="0" max="300" value="10"></label>
+            <button class="apply-btn" data-side="bottom">Apply</button>
+        </div>
+    </div>
+
+    <div id="confirm-backdrop"></div>
+    <div id="confirm-modal" role="alertdialog" aria-modal="true">
+        <p id="confirm-message"></p>
+        <div id="confirm-actions">
+            <button id="confirm-cancel">Cancel</button>
+            <button id="confirm-ok">Confirm</button>
+        </div>
+    </div>
+
+    <script src="clock.js"></script>
+</body>
+</html>
